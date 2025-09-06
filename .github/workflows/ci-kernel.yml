@@ -1,0 +1,26 @@
+name: CI (decision_kernel)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  kernel-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install decision_kernel (dev)
+        run: |
+          pip install -e services/decision_kernel[dev]
+      - name: Run kernel tests
+        run: |
+          pytest -q services/decision_kernel/tests
+      - name: CLI E2E smoke
+        run: |
+          python -m dkernel.cli synth --out _out/data
+          python -m dkernel.cli plan --sales _out/data/sales.csv --inventory _out/data/inventory.csv --offers _out/data/offers.csv --budget 8000 --slt 0.97 --out _out/plan.json
+          test -f _out/plan.json
+

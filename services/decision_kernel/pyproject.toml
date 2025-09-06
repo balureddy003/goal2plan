@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "decision-kernel"
+version = "0.2.0"
+description = "Decision kernel (VoI, optimizer, evidence, forecasting, CLI)"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.7",
+  "pydantic-settings>=2.2",
+  "pandas>=2.2",
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "typer>=0.12",
+  "networkx>=3.2",
+  "requests>=2.32",
+]
+
+[project.optional-dependencies]
+forecast = [
+  "u8darts>=0.30; platform_system != 'Windows'",
+]
+opt = [
+  "ortools>=9.10",
+]
+ml = [
+  "lightgbm>=4.3; platform_machine != 'arm64'",
+]
+llm = [
+  "transformers>=4.41",
+  "peft>=0.11",
+  "accelerate>=0.32",
+]
+dev = [
+  "pytest>=8.2",
+  "pytest-mock>=3.14",
+  "coverage>=7.5",
+  "ruff>=0.4",
+  "black>=24.4",
+  "mypy>=1.10",
+]
+
+[project.scripts]
+dkernel = "dkernel.cli:app"
